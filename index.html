@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -44,6 +43,17 @@
         </tfoot>
     </table>
 
+    <h2>Lyfthöjder för sågning</h2>
+    <table id="liftTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>Bräda</th>
+                <th>Lyft till (mm från botten)</th>
+            </tr>
+        </thead>
+        <tbody id="liftBody"></tbody>
+    </table>
+
     <script>
         function calculate() {
             const diameter = parseFloat(document.getElementById("diameter").value);
@@ -75,6 +85,28 @@
             document.getElementById("wasteLength").innerText = `${waste.toFixed(0)}`;
             document.getElementById("wastePercent").innerText = `${wastePercent}%`;
             document.getElementById("resultTable").style.display = "table";
+
+            // Lyfthöjder
+            const liftBody = document.getElementById("liftBody");
+            liftBody.innerHTML = "";
+            let liftPos = 0;
+            let brädaNummer = 1;
+
+            thicknesses.forEach(t => {
+                if (t <= 0) return;
+                let count = Math.floor((diameter + kerf) / (t + kerf));
+                for (let i = 0; i < count; i++) {
+                    liftPos += (i === 0) ? t : (kerf + t);
+                    const lyft = diameter - liftPos;
+                    liftBody.innerHTML += `<tr><td>${brädaNummer}</td><td>${lyft.toFixed(0)}</td></tr>`;
+                    brädaNummer++;
+                }
+                return; // bara en dimension används åt gången
+            });
+
+            if (brädaNummer > 1) {
+                document.getElementById("liftTable").style.display = "table";
+            }
         }
     </script>
 </body>
