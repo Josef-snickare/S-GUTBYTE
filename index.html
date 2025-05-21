@@ -63,12 +63,16 @@
             let remaining = diameter;
             let totalUsed = 0;
             let html = "";
+            let allBrädor = 0;
+            let sistaKerf = 0;
 
             thicknesses.forEach(t => {
                 if (t <= 0) return;
                 let count = Math.floor((remaining + kerf) / (t + kerf));
                 if (count > 0) {
                     let used = count * t + (count - 1) * kerf;
+                    sistaKerf = kerf;  // kom ihåg sista kerf
+                    allBrädor = count;
                     let yieldPercent = (used / diameter) * 100;
                     html += `<tr><td>${t}</td><td>${count}</td><td>${used}</td><td>${yieldPercent.toFixed(1)}%</td></tr>`;
                     remaining -= used;
@@ -76,7 +80,11 @@
                 } else {
                     html += `<tr><td>${t}</td><td>0</td><td>0</td><td>0%</td></tr>`;
                 }
+                return;
             });
+
+            // Ta med sista kerf för korrekt total användning
+            totalUsed += sistaKerf;
 
             const waste = diameter - totalUsed;
             const wastePercent = ((waste / diameter) * 100).toFixed(1);
