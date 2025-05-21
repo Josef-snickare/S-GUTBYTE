@@ -31,18 +31,15 @@
                 <th>Tjocklek (mm)</th>
                 <th>Antal brädor</th>
                 <th>Använd längd (mm)</th>
+                <th>Sågutbyte (%)</th>
             </tr>
         </thead>
         <tbody id="resultBody"></tbody>
         <tfoot>
             <tr>
-                <td><strong>Totalt</strong></td>
-                <td id="totalBoards">0</td>
-                <td id="totalUsed">0</td>
-            </tr>
-            <tr>
-                <td colspan="2"><strong>Sågutbyte (%)</strong></td>
-                <td id="yieldPercent">0</td>
+                <td><strong>Spill (mm)</strong></td>
+                <td colspan="2" id="wasteLength">0</td>
+                <td id="wastePercent">0%</td>
             </tr>
         </tfoot>
     </table>
@@ -55,7 +52,6 @@
 
             let remaining = diameter;
             let totalUsed = 0;
-            let totalBoards = 0;
             let html = "";
 
             thicknesses.forEach(t => {
@@ -63,19 +59,21 @@
                 let count = Math.floor((remaining + kerf) / (t + kerf));
                 if (count > 0) {
                     let used = count * t + (count - 1) * kerf;
-                    html += `<tr><td>${t}</td><td>${count}</td><td>${used}</td></tr>`;
+                    let yieldPercent = (used / diameter) * 100;
+                    html += `<tr><td>${t}</td><td>${count}</td><td>${used}</td><td>${yieldPercent.toFixed(1)}%</td></tr>`;
                     remaining -= used;
                     totalUsed += used;
-                    totalBoards += count;
                 } else {
-                    html += `<tr><td>${t}</td><td>0</td><td>0</td></tr>`;
+                    html += `<tr><td>${t}</td><td>0</td><td>0</td><td>0%</td></tr>`;
                 }
             });
 
+            const waste = diameter - totalUsed;
+            const wastePercent = ((waste / diameter) * 100).toFixed(1);
+
             document.getElementById("resultBody").innerHTML = html;
-            document.getElementById("totalUsed").innerText = totalUsed.toFixed(0);
-            document.getElementById("totalBoards").innerText = totalBoards;
-            document.getElementById("yieldPercent").innerText = ((totalUsed / diameter) * 100).toFixed(1);
+            document.getElementById("wasteLength").innerText = `${waste.toFixed(0)}`;
+            document.getElementById("wastePercent").innerText = `${wastePercent}%`;
             document.getElementById("resultTable").style.display = "table";
         }
     </script>
