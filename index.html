@@ -86,7 +86,7 @@
             document.getElementById("wastePercent").innerText = `${wastePercent}%`;
             document.getElementById("resultTable").style.display = "table";
 
-            // Lyfthöjder med korrigering för sågsnittets tjocklek
+            // Lyfthöjder (undersidan av sågspåret)
             const liftBody = document.getElementById("liftBody");
             liftBody.innerHTML = "";
             let liftPos = 0;
@@ -97,11 +97,11 @@
                 let count = Math.floor((diameter + kerf) / (t + kerf));
                 for (let i = 0; i < count; i++) {
                     liftPos += (i === 0) ? t : (kerf + t);
-                    const lyft = diameter - liftPos + kerf;
+                    const lyft = diameter - liftPos - kerf;
                     liftBody.innerHTML += `<tr><td>${brädaNummer}</td><td>${lyft.toFixed(0)}</td></tr>`;
                     brädaNummer++;
                 }
-                return; // endast en dimension används i taget
+                return;
             });
 
             if (brädaNummer > 1) {
