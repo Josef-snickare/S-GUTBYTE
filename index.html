@@ -4,55 +4,90 @@
     <meta charset="UTF-8">
     <title>Sågutbytesberäkning</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; }
-        input, textarea, button { margin: 5px 0; width: 100%; padding: 8px; font-size: 1em; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
+        body {
+            font-family: Arial, sans-serif;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            box-shadow: 0 0 10px #555;
+        }
+
+        input, textarea, button {
+            margin: 5px 0;
+            width: 100%;
+            padding: 8px;
+            font-size: 1em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
-    <h1>Sågutbytesberäkning</h1>
-    <label for="blockhojd">Blockhöjd efter första bakan (mm):</label>
-    <input type="number" id="blockhojd" value="350">
+    <div class="container">
+        <h1>Sågutbytesberäkning</h1>
+        <label for="blockhojd">Blockhöjd efter första bakan (mm):</label>
+        <input type="number" id="blockhojd" value="350">
 
-    <label for="kerf">Sågsnitt (mm):</label>
-    <input type="number" id="kerf" value="6">
+        <label for="kerf">Sågsnitt (mm):</label>
+        <input type="number" id="kerf" value="6">
 
-    <label for="thicknesses">Tjocklekar (kommaseparerade, t.ex. 50,45,38,25):</label>
-    <input type="text" id="thicknesses" value="50,45,38,25">
+        <label for="thicknesses">Tjocklekar (kommaseparerade, t.ex. 50,45,38,25):</label>
+        <input type="text" id="thicknesses" value="50,45,38,25">
 
-    <button onclick="calculate()">Beräkna</button>
+        <button onclick="calculate()">Beräkna</button>
 
-    <table id="resultTable" style="display:none;">
-        <thead>
-            <tr>
-                <th>Tjocklek (mm)</th>
-                <th>Antal brädor</th>
-                <th>Använd längd (mm)</th>
-                <th>Sågutbyte (%)</th>
-            </tr>
-        </thead>
-        <tbody id="resultBody"></tbody>
-        <tfoot>
-            <tr>
-                <td><strong>Spill (mm)</strong></td>
-                <td colspan="2" id="wasteLength">0</td>
-                <td id="wastePercent">0%</td>
-            </tr>
-        </tfoot>
-    </table>
+        <table id="resultTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Tjocklek (mm)</th>
+                    <th>Antal brädor</th>
+                    <th>Använd längd (mm)</th>
+                    <th>Sågutbyte (%)</th>
+                </tr>
+            </thead>
+            <tbody id="resultBody"></tbody>
+            <tfoot>
+                <tr>
+                    <td><strong>Spill (mm)</strong></td>
+                    <td colspan="2" id="wasteLength">0</td>
+                    <td id="wastePercent">0%</td>
+                </tr>
+            </tfoot>
+        </table>
 
-    <h2>Lyfthöjder för sågning</h2>
-    <table id="liftTable" style="display:none;">
-        <thead>
-            <tr>
-                <th>Bräda</th>
-                <th>Lyft till (mm från botten)</th>
-            </tr>
-        </thead>
-        <tbody id="liftBody"></tbody>
-    </table>
+        <h2>Lyfthöjder för sågning</h2>
+        <table id="liftTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Bräda</th>
+                    <th>Lyft till (mm från botten)</th>
+                </tr>
+            </thead>
+            <tbody id="liftBody"></tbody>
+        </table>
+    </div>
 
     <script>
         function calculate() {
@@ -80,7 +115,6 @@
                 } else {
                     html += `<tr><td>${t}</td><td>0</td><td>0</td><td>0%</td></tr>`;
                 }
-                return;
             });
 
             totalUsed += sistaKerf;
@@ -93,7 +127,7 @@
             document.getElementById("wastePercent").innerText = `${wastePercent}%`;
             document.getElementById("resultTable").style.display = "table";
 
-            // Lyfthöjder (undersidan av sågspåret)
+            // Lyfthöjder
             const liftBody = document.getElementById("liftBody");
             liftBody.innerHTML = "";
             let liftPos = 0;
@@ -108,7 +142,6 @@
                     liftBody.innerHTML += `<tr><td>${brädaNummer}</td><td>${lyft.toFixed(0)}</td></tr>`;
                     brädaNummer++;
                 }
-                return;
             });
 
             if (brädaNummer > 1) {
