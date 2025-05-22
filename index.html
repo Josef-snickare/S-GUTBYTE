@@ -56,11 +56,11 @@
 
     <script>
         function calculate() {
-            const diameter = parseFloat(document.getElementById("diameter").value);
+            const diameter = parseFloat(document.getElementById("Blockhöjd efter första bakan").value);
             const kerf = parseFloat(document.getElementById("kerf").value);
             const thicknesses = document.getElementById("thicknesses").value.split(",").map(Number);
 
-            let remaining = diameter;
+            let remaining = Blockhöjd efter första bakan;
             let totalUsed = 0;
             let html = "";
             let allBrädor = 0;
@@ -73,7 +73,7 @@
                     let used = count * t + (count - 1) * kerf;
                     sistaKerf = kerf;  // kom ihåg sista kerf
                     allBrädor = count;
-                    let yieldPercent = (used / diameter) * 100;
+                    let yieldPercent = (used / Blockhöjd efter första bakan) * 100;
                     html += `<tr><td>${t}</td><td>${count}</td><td>${used}</td><td>${yieldPercent.toFixed(1)}%</td></tr>`;
                     remaining -= used;
                     totalUsed += used;
@@ -87,7 +87,7 @@
             totalUsed += sistaKerf;
 
             const waste = diameter - totalUsed;
-            const wastePercent = ((waste / diameter) * 100).toFixed(1);
+            const wastePercent = ((waste / Blockhöjd efter första bakan) * 100).toFixed(1);
 
             document.getElementById("resultBody").innerHTML = html;
             document.getElementById("wasteLength").innerText = `${waste.toFixed(0)}`;
@@ -102,10 +102,10 @@
 
             thicknesses.forEach(t => {
                 if (t <= 0) return;
-                let count = Math.floor((diameter + kerf) / (t + kerf));
+                let count = Math.floor((Blockhöjd efter första bakan + kerf) / (t + kerf));
                 for (let i = 0; i < count; i++) {
                     liftPos += (i === 0) ? t : (kerf + t);
-                    const lyft = diameter - liftPos - kerf;
+                    const lyft = Blockhöjd efter första bakan - liftPos - kerf;
                     liftBody.innerHTML += `<tr><td>${brädaNummer}</td><td>${lyft.toFixed(0)}</td></tr>`;
                     brädaNummer++;
                 }
