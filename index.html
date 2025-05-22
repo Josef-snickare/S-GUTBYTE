@@ -13,8 +13,8 @@
 </head>
 <body>
     <h1>Sågutbytesberäkning</h1>
-    <label for="diameter">Blockhöjd efter första bakan (mm):</label>
-    <input type="number" id="Blockhöjd efter första bakan" value="350">
+    <label for="blockhojd">Blockhöjd efter första bakan (mm):</label>
+    <input type="number" id="blockhojd" value="350">
 
     <label for="kerf">Sågsnitt (mm):</label>
     <input type="number" id="kerf" value="6">
@@ -56,11 +56,11 @@
 
     <script>
         function calculate() {
-            const diameter = parseFloat(document.getElementById("Blockhöjd efter första bakan").value);
+            const blockhojd = parseFloat(document.getElementById("blockhojd").value);
             const kerf = parseFloat(document.getElementById("kerf").value);
             const thicknesses = document.getElementById("thicknesses").value.split(",").map(Number);
 
-            let remaining = Blockhöjd efter första bakan;
+            let remaining = blockhojd;
             let totalUsed = 0;
             let html = "";
             let allBrädor = 0;
@@ -71,9 +71,9 @@
                 let count = Math.floor((remaining + kerf) / (t + kerf));
                 if (count > 0) {
                     let used = count * t + (count - 1) * kerf;
-                    sistaKerf = kerf;  // kom ihåg sista kerf
+                    sistaKerf = kerf;
                     allBrädor = count;
-                    let yieldPercent = (used / Blockhöjd efter första bakan) * 100;
+                    let yieldPercent = (used / blockhojd) * 100;
                     html += `<tr><td>${t}</td><td>${count}</td><td>${used}</td><td>${yieldPercent.toFixed(1)}%</td></tr>`;
                     remaining -= used;
                     totalUsed += used;
@@ -83,11 +83,10 @@
                 return;
             });
 
-            // Ta med sista kerf för korrekt total användning
             totalUsed += sistaKerf;
 
-            const waste = diameter - totalUsed;
-            const wastePercent = ((waste / Blockhöjd efter första bakan) * 100).toFixed(1);
+            const waste = blockhojd - totalUsed;
+            const wastePercent = ((waste / blockhojd) * 100).toFixed(1);
 
             document.getElementById("resultBody").innerHTML = html;
             document.getElementById("wasteLength").innerText = `${waste.toFixed(0)}`;
@@ -102,10 +101,10 @@
 
             thicknesses.forEach(t => {
                 if (t <= 0) return;
-                let count = Math.floor((Blockhöjd efter första bakan + kerf) / (t + kerf));
+                let count = Math.floor((blockhojd + kerf) / (t + kerf));
                 for (let i = 0; i < count; i++) {
                     liftPos += (i === 0) ? t : (kerf + t);
-                    const lyft = Blockhöjd efter första bakan - liftPos - kerf;
+                    const lyft = blockhojd - liftPos - kerf;
                     liftBody.innerHTML += `<tr><td>${brädaNummer}</td><td>${lyft.toFixed(0)}</td></tr>`;
                     brädaNummer++;
                 }
