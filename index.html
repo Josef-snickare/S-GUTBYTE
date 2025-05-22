@@ -47,6 +47,7 @@
 <body>
     <div class="container">
         <h1>Sågutbytesberäkning</h1>
+
         <label for="blockhojd">Blockhöjd efter första bakan (mm):</label>
         <input type="number" id="blockhojd" value="350">
 
@@ -98,7 +99,6 @@
             let remaining = blockhojd;
             let totalUsed = 0;
             let html = "";
-            let allBrädor = 0;
             let sistaKerf = 0;
 
             thicknesses.forEach(t => {
@@ -107,7 +107,6 @@
                 if (count > 0) {
                     let used = count * t + (count - 1) * kerf;
                     sistaKerf = kerf;
-                    allBrädor = count;
                     let yieldPercent = (used / blockhojd) * 100;
                     html += `<tr><td>${t}</td><td>${count}</td><td>${used}</td><td>${yieldPercent.toFixed(1)}%</td></tr>`;
                     remaining -= used;
